@@ -16,15 +16,20 @@ class ai1ec_migration {
 	}
 
 	function process_avents() {
+		$loop = 0;
 		foreach ( $this->avents as $avent ) {
 			e( "Processing: " . $avent->ID );
 			br();
 			$fields = $this->get_event_fields( $avent->ID );
-			$this->map_event_fields( $fields );
+			if ( $fields ) {
+				$this->map_event_fields( $fields );
+			}
 			$this->update_post( $avent );
 			//bw_flush();
-			//continue;
-			break;
+			$loop++;
+			if ( $loop >= 10 ) {
+				break;
+			}
 		}
 
 	}
@@ -35,7 +40,7 @@ class ai1ec_migration {
 				, 'numberposts' => -1
 				, 'orderby' => 'ID'
 				, 'order' => 'ASC'
-				, 'post_status' => 'any'
+				//, 'post_status' => 'any'
 				];
 
 		$avents = bw_get_posts( $args );
@@ -51,7 +56,7 @@ class ai1ec_migration {
 		if ( $vars && count( $vars )) {
 			$fields=$vars[0];
 		} else {
-			gob();
+			$fields = null;
 		}
 		return $fields;
 	}
@@ -85,6 +90,7 @@ class ai1ec_migration {
 
 	function get_cost( $cost ) {
 		$cost_fields = unserialize( $cost);
+		print_r( $cost_fields);
 		if ( $cost_fields['is_free']) {
 			if ( empty( $cost_fields['cost'] ) ) {
 				$cost_fields['cost']='Free';
