@@ -52,6 +52,7 @@ function oik_events_oik_fields_loaded() {
 
 	oik_events_register_categories();
 	oik_events_register_post_types();
+	oik_events_register_block_bindings_source();
 }
 
 /**
@@ -127,6 +128,9 @@ function oik_events_register_event() {
 	bw_register_field_for_object_type( "_ticket_url", $post_type );
 	bw_register_field_for_object_type( "_cost", $post_type );
 
+	oik_events_register_post_meta( 'date', $post_type, __( 'Date', 'oik-events') );
+	oik_events_register_post_meta( 'start_time', $post_type, __( 'Start time', 'oik-events') );
+	oik_events_register_post_meta( 'end_time', $post_type, __( 'End time', 'oik-events') );
 
 	oik_events_register_google_maps_fields( $post_type );
 
@@ -136,5 +140,86 @@ function oik_events_register_post_type_args( $args ) {
 	//gob();
 	return $args;
 }
+
+/**
+ * Registers the post meta to the REST API.
+ *
+ * register_post_meta() calls register_meta().
+ *
+ * @param $field
+ * @param $post_type
+ */
+function oik_events_register_post_meta( $field, $post_type, $description ) {
+	global $wp_meta_keys;
+	bw_trace2( $wp_meta_keys, 'wp_meta_keys before', true, BW_TRACE_DEBUG );
+	$registered =  register_post_meta( $post_type, $field,
+		array('show_in_rest' => true,
+		      'single' => true,
+		      'type' => 'string',
+		      'auth_callback' => 'oik_events_auth_callback',
+		      'description' => $description,
+				'default' => $field,
+			'label' => $description
+		)
+	);
+	bw_trace2( $registered, 'registered?', false, BW_TRACE_VERBOSE );
+	bw_trace2( $wp_meta_keys, 'wp_meta_keys after', false, BW_TRACE_VERBOSE );
+}
+
+function oik_events_auth_callback() {
+	return current_user_can( 'edit_posts');
+}
+
+/**
+ * Registers block bindings custom source.
+ * @link https://developer.wordpress.org/news/2024/03/06/introducing-block-bindings-part-2-working-with-custom-binding-sources/
+ *
+ * @return void
+ */
+function oik_events_register_block_bindings_source() {
+	register_block_bindings_source( 'oik-events/custom-source', array(
+		'label'              => __( 'Event bindings', 'oik-events' ),
+		'get_value_callback' => 'oik_events_bindings_callback',
+		'uses_context'       => [ 'postId', 'postType' ]
+	) );
+}
+
+/**
+ *
+ * An alternative to using [bw_field field_name] to display individual post meta fields or virtual fields.
+ *
+ * ```
+ * <!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"oik-events/custom-source","args":{"key":"_date"}}}}} -->
+ * <p>oik-events/custom-source</p>
+ * <!-- /wp:paragraph -->
+ * ```
+ * @param $source_args
+ * @param $block_instance
+ * @param $attribute_name - probably 'content' for paragraphs
+ *
+ * @return string
+ */
+
+function oik_events_bindings_callback( $source_args, $block_instance, $attribute_name ) {
+	bw_trace2( $source_args, "source_args", false );
+	bw_trace2( $attribute_name, "attribute_name", false );
+	bw_trace2( $block_instance->context, "context", false );
+	if ( isset( $source_args['label'] ) ) {
+		return "Event date";
+	}
+	if ( $source_args['key'] === '_date') {
+		$id = $block_instance->context['postId'];
+		$date = get_post_meta( $id, '_date' , true );
+		if ( $date ) {
+		$format = get_option( 'date_format' );
+		$date = strtotime( $date );
+		$date = date_i18n( $format, $date );
+		}
+		return $date;
+	}
+	return 'custom hehe';
+}
+
+
 
 oik_events_loaded();
