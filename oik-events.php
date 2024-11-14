@@ -52,6 +52,7 @@ function oik_events_oik_fields_loaded() {
 
 	oik_events_register_categories();
 	oik_events_register_post_types();
+	oik_events_register_virtual_fields();
 	oik_events_register_block_bindings_source();
 }
 
@@ -89,8 +90,14 @@ function oik_events_register_google_maps_fields( $post_type ) {
 
 }
 
+function oik_events_register_virtual_fields() {
+	oik_require( 'includes/oik-events-register-virtual-fields.php', 'oik-events' );
+	oik_events_lazy_register_virtual_fields();
+
+}
+
 /**
- * Register a event
+ * Registers the event post type.
  *
  */
 function oik_events_register_event() {
@@ -177,8 +184,29 @@ function oik_events_auth_callback() {
  * @return void
  */
 function oik_events_register_block_bindings_source() {
-	register_block_bindings_source( 'oik-events/custom-source', array(
-		'label'              => __( 'Event bindings', 'oik-events' ),
+
+	register_block_bindings_source( 'oik-events/event-date', array(
+		'label'              => __( 'Event date: Mon n Day', 'oik-events' ),
+		'get_value_callback' => 'oik_events_bindings_callback',
+		'uses_context'       => [ 'postId', 'postType' ]
+	) );
+	register_block_bindings_source( 'oik-events/event-when', array(
+		'label'              => __( 'Event when: Mon n @ hh:mm - hh:mm', 'oik-events' ),
+		'get_value_callback' => 'oik_events_bindings_callback',
+		'uses_context'       => [ 'postId', 'postType' ]
+	) );
+	register_block_bindings_source( 'oik-events/event-where', array(
+		'label'              => __( 'Event where', 'oik-events' ),
+		'get_value_callback' => 'oik_events_bindings_callback',
+		'uses_context'       => [ 'postId', 'postType' ]
+	) );
+	register_block_bindings_source( 'oik-events/event-cost', array(
+		'label'              => __( 'Event cost', 'oik-events' ),
+		'get_value_callback' => 'oik_events_bindings_callback',
+		'uses_context'       => [ 'postId', 'postType' ]
+	) );
+	register_block_bindings_source( 'oik-events/event-contact', array(
+		'label'              => __( 'Event contact', 'oik-events' ),
 		'get_value_callback' => 'oik_events_bindings_callback',
 		'uses_context'       => [ 'postId', 'postType' ]
 	) );
@@ -199,25 +227,9 @@ function oik_events_register_block_bindings_source() {
  *
  * @return string
  */
-
 function oik_events_bindings_callback( $source_args, $block_instance, $attribute_name ) {
-	bw_trace2( $source_args, "source_args", false );
-	bw_trace2( $attribute_name, "attribute_name", false );
-	bw_trace2( $block_instance->context, "context", false );
-	if ( isset( $source_args['label'] ) ) {
-		return "Event date";
-	}
-	if ( $source_args['key'] === '_date') {
-		$id = $block_instance->context['postId'];
-		$date = get_post_meta( $id, '_date' , true );
-		if ( $date ) {
-		$format = get_option( 'date_format' );
-		$date = strtotime( $date );
-		$date = date_i18n( $format, $date );
-		}
-		return $date;
-	}
-	return 'custom hehe';
+	oik_require( 'includes/oik-events-bindings.php', 'oik-events');
+	return oik_events_lazy_bindings_callback( $source_args, $block_instance, $attribute_name );
 }
 
 
