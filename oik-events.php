@@ -81,7 +81,7 @@ function oik_events_register_google_maps_fields( $post_type ) {
 	// Don't display this by default since the content may be nested
 	//bw_register_field_for_object_type( "featured", $post_type );
 
-	bw_register_field_for_object_type( "googlemap", $post_type );
+	bw_register_field_for_object_type( "googlemap", $post_type, true );
 
 	bw_register_field_for_object_type( "_address", $post_type );
 	bw_register_field_for_object_type( "_post_code", $post_type );
@@ -105,7 +105,7 @@ function oik_events_register_event() {
 	$post_type_args = array();
 	$post_type_args['label'] = 'Events';
 	$post_type_args['description'] = 'Events';
-	$post_type_args['supports'] = array( 'title', 'editor', 'thumbnail', 'excerpt', 'home', 'publicize', 'author', 'revisions' );
+	$post_type_args['supports'] = array( 'title', 'editor', 'thumbnail', 'excerpt', 'home', 'publicize', 'author', 'revisions', 'custom-fields' );
 	$post_type_args['has_archive'] = true;
 	$post_type_args['menu_icon'] = 'dashicons-flag';
 	$post_type_args['show_in_rest'] = true;
@@ -135,9 +135,16 @@ function oik_events_register_event() {
 	bw_register_field_for_object_type( "_ticket_url", $post_type );
 	bw_register_field_for_object_type( "_cost", $post_type );
 
-	oik_events_register_post_meta( 'date', $post_type, __( 'Date', 'oik-events') );
-	oik_events_register_post_meta( 'start_time', $post_type, __( 'Start time', 'oik-events') );
-	oik_events_register_post_meta( 'end_time', $post_type, __( 'End time', 'oik-events') );
+	oik_events_register_post_meta( '_date', $post_type, __( 'Date', 'oik-events') );
+	oik_events_register_post_meta( '_start_time', $post_type, __( 'Start time', 'oik-events') );
+	oik_events_register_post_meta( '_end_time', $post_type, __( 'End time', 'oik-events') );
+	oik_events_register_post_meta( '_contact_name', $post_type, __( 'Contact name', 'oik-events') );
+	bw_maybe_register_post_meta( '_contact_phone', $post_type, __( 'Contact phone', 'oik-events'));
+	oik_events_register_post_meta( '_contact_email', $post_type, __( 'Contact email', 'oik-events') );
+	oik_events_register_post_meta( '_contact_url', $post_type, __( 'Contact URL', 'oik-events') );
+	oik_events_register_post_meta( '_ticket_url', $post_type, __( 'Ticket URL', 'oik-events') );
+	oik_events_register_post_meta( '_cost', $post_type, __( 'Cost', 'oik-events') );
+	oik_events_register_post_meta( '_address', $post_type, __( 'Address', 'oik-events'));
 
 	oik_events_register_google_maps_fields( $post_type );
 
@@ -165,7 +172,7 @@ function oik_events_register_post_meta( $field, $post_type, $description ) {
 		      'type' => 'string',
 		      'auth_callback' => 'oik_events_auth_callback',
 		      'description' => $description,
-				'default' => $field,
+				'default' => '',
 			'label' => $description
 		)
 	);
