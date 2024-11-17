@@ -49,12 +49,61 @@ function oik_events_event_calendar_date( $date, $id) {
 function oik_events_event_when( $date, $start_time, $end_time, $id ) {
 	oik_require( 'includes/oik-events-bindings.php', 'oik-events');
 	$html=oik_events_theme_field( '_date', $id );
-	$html.=' @ ';
-	$html.=oik_events_theme_field( '_start_time', $id );
-	$html.=' - ';
-	$html.=oik_events_theme_field( '_end_time', $id );
-
+	if ( oik_events_is_all_day( $start_time, $end_time )) {
+		$html .= '<span class="sep"> </span>';
+		$html .= '<span class="all-day">all-day</span>';
+	} else {
+		if ( $start_time !== '') {
+			$html.='<span class="sep"> @ </span>';
+			$html.=oik_events_theme_field( '_start_time', $id );
+		}
+		if ( $end_time !== '' ) {
+			$html.='<span class="sep"> - </span>';
+			$html.=oik_events_theme_field( '_end_time', $id );
+		}
+	}
 	return $html;
+}
+
+/**
+ * Determines if the event is all-day.
+ *
+ * $start_time | $end_time | all-day? | text
+ * ----------- | --------- | -------- | --------
+ * 00:00       | 23:59     | Y        | all-day
+ * 00:00       | 00:00     | Y        | all-day
+ * 00:00       | -         | ?        |
+ * -           | -         | Y        | all-day
+ * x           | y         | N        | @ x to y
+ * x           | -         | N        | @ x
+ * -           | y         | N        | to y
+ *
+ * @param $start_time
+ * @param $end_time
+ * @return bool
+ */
+function oik_events_is_all_day( $start_time, $end_time ) {
+	$all_day = false;
+	$stset = ( $start_time !== '' );
+	$etset = ( $end_time !== '');
+	if ( $start_time === '00:00' ) {
+		switch ( $end_time ) {
+			case '23:59':
+			case '00:00':
+			case '':
+				$all_day = true;
+				break;
+			default:
+				// $all_day is already false
+		}
+	} else {
+		$stset = ( $start_time !== '' );
+		$etset = ( $end_time !== '');
+		$all_day = !$stset && !$etset ;
+	}
+	bw_trace2();
+	return $all_day;
+
 }
 
 /**
