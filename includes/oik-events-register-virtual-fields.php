@@ -21,7 +21,8 @@ function oik_events_lazy_register_virtual_fields() {
 		"#plugin"  =>"oik-events",
 		"#file"    =>"includes/oik-events-theme-virtual-fields.php",
 		"#form"    =>false,
-		"hint"     =>__( "virtual field", "oik-events" )
+		"hint"     =>__( "virtual field", "oik-events" ),
+		"#theme" => false
 		);
 	bw_register_field( "event_day", "virtual", "Event day", $field_args );
 	bw_register_field_for_object_type( 'event_day', 'event', true );
@@ -32,7 +33,8 @@ function oik_events_lazy_register_virtual_fields() {
 	                      "#plugin"  =>"oik-events",
 	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
 	                      "#form"    =>false,
-	                      "hint"     =>__( "virtual field", "oik-events" )
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+	                      "#theme" => false
 	);
 	bw_register_field( "event_mon", "virtual", "Event mon", $field_args );
 	bw_register_field_for_object_type( 'event_mon', 'event', true );
@@ -42,7 +44,8 @@ function oik_events_lazy_register_virtual_fields() {
 	                      "#plugin"  =>"oik-events",
 	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
 	                      "#form"    =>false,
-	                      "hint"     =>__( "virtual field", "oik-events" )
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+	                      "#theme" => false
 	);
 	bw_register_field( "event_dd", "virtual", "Event day of month", $field_args );
 	bw_register_field_for_object_type( 'event_dd', 'event', true );
@@ -52,7 +55,8 @@ function oik_events_lazy_register_virtual_fields() {
 	                      "#plugin"  =>"oik-events",
 	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
 	                      "#form"    =>false,
-	                      "hint"     =>__( "virtual field", "oik-events" )
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+	                      "#theme" => false
 	);
 	bw_register_field( "event_cal", "virtual", "Event calendar date", $field_args );
 	bw_register_field_for_object_type( 'event_cal', 'event', true );
@@ -71,7 +75,8 @@ function oik_events_lazy_register_virtual_fields() {
 	                      "#plugin"  =>"oik-events",
 	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
 	                      "#form"    =>false,
-	                      "hint"     =>__( "virtual field", "oik-events" )
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+		"#theme" => false
 	);
 	bw_register_field( "event_when", "virtual", "Event when", $field_args );
 	bw_register_field_for_object_type( 'event_when', 'event', true );
@@ -81,9 +86,10 @@ function oik_events_lazy_register_virtual_fields() {
 	                      "#plugin"  =>"oik-events",
 	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
 	                      "#form"    =>false,
-	                      "hint"     =>__( "virtual field", "oik-events" )
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+	                      "#theme" => false
 	);
 	bw_register_field( "event_contact", "virtual", "Contact", $field_args );
 	bw_register_field_for_object_type( 'event_contact', 'event', true );
-	
+
 }
