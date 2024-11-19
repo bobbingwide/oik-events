@@ -145,6 +145,7 @@ function oik_events_register_event() {
 	oik_events_register_post_meta( '_ticket_url', $post_type, __( 'Ticket URL', 'oik-events') );
 	oik_events_register_post_meta( '_cost', $post_type, __( 'Cost', 'oik-events') );
 	oik_events_register_post_meta( '_address', $post_type, __( 'Address', 'oik-events'));
+	oik_events_register_post_meta( '_post_code', $post_type, __( 'Post code', 'oik-events'));
 
 	oik_events_register_google_maps_fields( $post_type );
 

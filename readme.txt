@@ -1,18 +1,17 @@
-# oik-events 
-![banner](assets/oik-events-banner-772x250.jpg)
-* Contributors: bobbingwide
-* Donate link: https://www.oik-plugins.com/oik/oik-donate/
-* Tags: oik, events
-* Requires at least: 6.6
-* Tested up to: 6.7
-* Stable tag: 0.0.0
+=== oik-events ===
+Contributors: bobbingwide
+Donate link: https://www.oik-plugins.com/oik/oik-donate/
+Tags: oik, events
+Requires at least: 6.6
+Tested up to: 6.7
+Stable tag: 0.0.0
 
 Events plugin to replace All-In-One Events Calendar.
 
-## Description 
-Use the oik-events plugin to create and display Events on your website.
+== Description ==
+Use the oik-events plugin to create and display Events on your website. 
 
-## Installation 
+== Installation ==
 1. Upload the contents of the oik-events plugin to the `/wp-content/plugins/oik-events' directory
 1. Activate the oik-events plugin through the 'Plugins' menu in WordPress
 1. Visit the oik-events admin page
@@ -25,9 +24,9 @@ The oik-events plugin is dependent upon the following plugins:
 - oik
 - oik-dates
 
-## Frequently Asked Questions 
+== Frequently Asked Questions ==
 
-# How do I display event fields? 
+= How do I display event fields? =
 
 Use one or more of the following plugin solutions:
 
@@ -35,25 +34,25 @@ Use one or more of the following plugin solutions:
 - oik-fields - to display the postmeta and virtual fields using `[bw_field]` and `[bw_fields]` shortcodes.
 
 
-# How do I display future events? 
+= How do I display future events? =
 
 Use the `[bw_related]` shortcode from oik-fields.
 
 
-# Can I migrate from other Events Calendar plugins 
+= Can I migrate from other Events Calendar plugins =
 No. This only supports migration from published posts in `ai1ec_events`
 
 
-## Screenshots 
+== Screenshots ==
 1. Event fields displayed by sb-field-block
-2. Event summary grid
+2. Event summary grid 
 
-## Upgrade Notice 
-# 0.0.0 
+== Upgrade Notice ==
+= 0.0.0 = 
 Switch to oik-events to replace the All-In-One Events Calendar plugin.
 
-## Changelog 
-# 0.0.0 
+== Changelog ==
+= 0.0.0 = 
 * Changed: Refactor oik_events_events_when() #2
 * Changed: Don't theme virtual fields displayed by [bw_fields] #2
 * Added: Start adding virtual fields for Events #2
@@ -65,7 +64,7 @@ Switch to oik-events to replace the All-In-One Events Calendar plugin.
 * Tested: With Gutenberg 19.6.1
 * Tested: With PHP 8.3
 
-## Further reading 
+== Further reading ==
 
 If you want to read more about oik plugins and themes then please visit
 [oik-plugins](https://www.oik-plugins.com/)
