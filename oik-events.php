@@ -42,6 +42,7 @@ function oik_events_loaded() {
 	add_action( "oik_admin_menu", "oik_events_admin_menu" );
 	add_action( "oik_fields_loaded", "oik_events_oik_fields_loaded" );
 	add_filter( 'register_post_type_args', 'oik_events_register_post_type_args', 100 );
+	add_filter( 'aql_query_vars', 'oik_events_aql_query_vars', 10, 3 );
 }
 
 
@@ -241,5 +242,29 @@ function oik_events_bindings_callback( $source_args, $block_instance, $attribute
 }
 
 
+/**
+ * Sets the meta query value for _date using logic in oik-dates.
+ *
+ * The filter function attached to `oik_default_meta_value_date`
+ * is expected to be `oikd8_default_meta_value_date()`.
+ *
+ * @param array $query_args Arguments to be passed to WP_Query.
+ * @param array $block_query The query attribute retrieved from the block.
+ * @param boolean $inherited Whether the query is being inherited.
+ * @return array
+ */
+function oik_events_aql_query_vars( $query_args, $block_query, $inherited ) {
+	//bw_backtrace();
+	//bw_trace2();
+	if ( isset( $query_args['meta_query'])) {
+		foreach ( $query_args['meta_query'] as $index=>$meta_query ) {
+			if ( '_date' === $meta_query['key'] ) {
+				$query_args['meta_query'][ $index ]['value']=
+					apply_filters( "oik_default_meta_value_date", $meta_query['value'], null );
+			}
+		}
+	}
+	return $query_args;
+}
 
 oik_events_loaded();
