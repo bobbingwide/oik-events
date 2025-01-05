@@ -8,7 +8,7 @@ Author: bobbingwide
 Author URI: https://bobbingwide.com/about/bobbingwide
 License: GPL2
 
-    Copyright 2024 Bobbing Wide (email : herb@bobbingwide.com )
+    Copyright 2024, 2025 Bobbing Wide (email : herb@bobbingwide.com )
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2,
@@ -72,7 +72,25 @@ function oik_events_register_post_types() {
 	oik_events_register_event();
 }
 
+/**
+ * Registers Google Maps fields for the chosen post type.
+ *
+ * Note: This doesn't override the googlemap virtual field registered by oik-fields.
+ * It gives it a different name - preceded by an underscore.
+ * @param $post_type
+ *
+ * @return void
+ */
 function oik_events_register_google_maps_fields( $post_type ) {
+	$field_args = array( "#callback" => "bw_fields_get_google_map"
+	, "#parms" => "_post_code,_lat,_long"
+	, "#plugin" => "oik-fields"
+	, "#file" => "includes/oik-fields-virtual-google-map.php"
+	, "#form" => false
+	, "hint" => __( "virtual field", "oik-fields" )
+	, "#theme" => false
+	);
+	bw_register_field( "_googlemap", "virtual", "Google map", $field_args );
 
 	bw_register_field( "_address", "textarea", "Address" );
 	bw_register_field( "_post_code", "text", "Post Code" );
@@ -82,7 +100,7 @@ function oik_events_register_google_maps_fields( $post_type ) {
 	// Don't display this by default since the content may be nested
 	//bw_register_field_for_object_type( "featured", $post_type );
 
-	bw_register_field_for_object_type( "googlemap", $post_type, true );
+	bw_register_field_for_object_type( "_googlemap", $post_type, true );
 
 	bw_register_field_for_object_type( "_address", $post_type );
 	bw_register_field_for_object_type( "_post_code", $post_type );
@@ -112,8 +130,9 @@ function oik_events_register_event() {
 	$post_type_args['show_in_rest'] = true;
 	bw_register_post_type( $post_type, $post_type_args );
 
-	bw_register_field( "_date", "date", "Date" );
+	bw_register_field( "_start_date", "date", "Start date" );
 	bw_register_field( "_start_time", "time", "Start time", array( '#theme_null' => false ) );
+	bw_register_field( "_end_date", "date", "End date" );
 	bw_register_field( "_end_time", "time", "End time", array( '#theme_null' => false ) );
 	bw_register_field( '_contact_name', 'text', 'Contact name');
 	bw_register_field( '_contact_phone', 'text', 'Contact phone');
@@ -126,8 +145,9 @@ function oik_events_register_event() {
 	// Attendees? Expected and actual
 	//
 
-	bw_register_field_for_object_type( "_date", $post_type );
+	bw_register_field_for_object_type( "_start_date", $post_type );
 	bw_register_field_for_object_type( "_start_time", $post_type );
+	bw_register_field_for_object_type( "_end_date", $post_type );
 	bw_register_field_for_object_type( "_end_time", $post_type );
 	bw_register_field_for_object_type( "_contact_name", $post_type );
 	bw_register_field_for_object_type( "_contact_phone", $post_type );
@@ -136,8 +156,9 @@ function oik_events_register_event() {
 	bw_register_field_for_object_type( "_ticket_url", $post_type );
 	bw_register_field_for_object_type( "_cost", $post_type );
 
-	oik_events_register_post_meta( '_date', $post_type, __( 'Date', 'oik-events') );
+	oik_events_register_post_meta( '_start_date', $post_type, __( 'Start date', 'oik-events') );
 	oik_events_register_post_meta( '_start_time', $post_type, __( 'Start time', 'oik-events') );
+	oik_events_register_post_meta( '_end_date', $post_type, __( 'End date', 'oik-events') );
 	oik_events_register_post_meta( '_end_time', $post_type, __( 'End time', 'oik-events') );
 	oik_events_register_post_meta( '_contact_name', $post_type, __( 'Contact name', 'oik-events') );
 	bw_maybe_register_post_meta( '_contact_phone', $post_type, __( 'Contact phone', 'oik-events'));
@@ -164,6 +185,7 @@ function oik_events_register_post_type_args( $args ) {
  *
  * @param $field
  * @param $post_type
+ * @param $description
  */
 function oik_events_register_post_meta( $field, $post_type, $description ) {
 	global $wp_meta_keys;
@@ -248,17 +270,36 @@ function oik_events_bindings_callback( $source_args, $block_instance, $attribute
  * The filter function attached to `oik_default_meta_value_date`
  * is expected to be `oikd8_default_meta_value_date()`.
  *
+ * [0] => Array
+ *
+ * [meta_query] => Array
+ *
+ * [relation] => (string) "AND"
+ * [0] => Array
+ *
+ * [key] => (string) "_oikt_recording"
+ * [value] => (string) "1624"
+ *
+ * [1] => Array
+ *
+ * [key] => (string) "_oikt_track"
+ * [compare] => (string) ">"
+ *
  * @param array $query_args Arguments to be passed to WP_Query.
  * @param array $block_query The query attribute retrieved from the block.
  * @param boolean $inherited Whether the query is being inherited.
+ *
  * @return array
  */
 function oik_events_aql_query_vars( $query_args, $block_query, $inherited ) {
-	//bw_backtrace();
-	//bw_trace2();
+	bw_backtrace();
+	bw_trace2();
 	if ( isset( $query_args['meta_query'])) {
 		foreach ( $query_args['meta_query'] as $index=>$meta_query ) {
-			if ( '_date' === $meta_query['key'] ) {
+			if ( $index === 'relation' ) {
+				continue;
+			}
+			if ( '_start_date' === $meta_query['key'] ) {
 				$query_args['meta_query'][ $index ]['value']=
 					apply_filters( "oik_default_meta_value_date", $meta_query['value'], null );
 			}
