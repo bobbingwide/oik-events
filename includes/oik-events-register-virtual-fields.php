@@ -92,4 +92,16 @@ function oik_events_lazy_register_virtual_fields() {
 	bw_register_field( "event_contact", "virtual", "Contact", $field_args );
 	bw_register_field_for_object_type( 'event_contact', 'event', true );
 
+	$field_args=array( 	"#callback"=>"oik_events_event_tickets",
+	                      "#parms"   =>"_ticket_url,_date",
+	                      "#plugin"  =>"oik-events",
+	                      "#file"    =>"includes/oik-events-theme-virtual-fields.php",
+	                      "#form"    =>false,
+	                      "hint"     =>__( "virtual field", "oik-events" ),
+	                      "#theme" => false,
+							"#theme_null" => false
+	);
+	bw_register_field( "event_tickets", "virtual", "Event tickets", $field_args );
+	bw_register_field_for_object_type( 'event_tickets', 'event', true );
+
 }
