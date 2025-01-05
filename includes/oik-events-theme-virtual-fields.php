@@ -48,7 +48,7 @@ function oik_events_event_calendar_date( $date, $id) {
  */
 function oik_events_event_when( $date, $start_time, $end_time, $id ) {
 	oik_require( 'includes/oik-events-bindings.php', 'oik-events');
-	$html=oik_events_theme_field( '_date', $id );
+	$html=oik_events_theme_field( '_start_date', $id );
 	if ( oik_events_is_all_day( $start_time, $end_time )) {
 		$html .= '<span class="sep"> </span>';
 		$html .= '<span class="all-day">all-day</span>';
