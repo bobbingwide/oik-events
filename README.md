@@ -4,8 +4,8 @@
 * Donate link: https://www.oik-plugins.com/oik/oik-donate/
 * Tags: oik, events
 * Requires at least: 6.6
-* Tested up to: 6.7
-* Stable tag: 0.0.0
+* Tested up to: 6.7.1
+* Stable tag: 0.1.0
 
 Events plugin to replace All-In-One Events Calendar.
 
@@ -38,6 +38,7 @@ Use one or more of the following plugin solutions:
 # How do I display future events? 
 
 Use the `[bw_related]` shortcode from oik-fields.
+Use the Advanced Query Loop plugin.
 
 
 # Can I migrate from other Events Calendar plugins 
@@ -49,10 +50,21 @@ No. This only supports migration from published posts in `ai1ec_events`
 2. Event summary grid
 
 ## Upgrade Notice 
+# 0.1.0 
+Now supports Event start and end dates and times.
+
 # 0.0.0 
 Switch to oik-events to replace the All-In-One Events Calendar plugin.
 
 ## Changelog 
+# 0.1.0 
+* Changed: Change oik_events_event_when to use _start_date #1 #2 #4
+* Changed: Set both start and end dates and the post_date #1
+* Added: Add _googlemap virtual field #2.
+* Changed: Implement both start and end date fields #1
+* Added: Add event_tickets button #3
+* Added: Implement aql_query_vars to set meta_value for _date meta queries #4
+
 # 0.0.0 
 * Changed: Refactor oik_events_events_when() #2
 * Changed: Don't theme virtual fields displayed by [bw_fields] #2

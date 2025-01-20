@@ -3,7 +3,7 @@
 Plugin Name: oik-events
 Plugin URI: https://github.com/bobbingwide/oik-events
 Description: Events
-Version: 0.0.0
+Version: 0.1.0
 Author: bobbingwide
 Author URI: https://bobbingwide.com/about/bobbingwide
 License: GPL2
@@ -292,8 +292,8 @@ function oik_events_bindings_callback( $source_args, $block_instance, $attribute
  * @return array
  */
 function oik_events_aql_query_vars( $query_args, $block_query, $inherited ) {
-	bw_backtrace();
-	bw_trace2();
+	//bw_backtrace();
+	//bw_trace2();
 	if ( isset( $query_args['meta_query'])) {
 		foreach ( $query_args['meta_query'] as $index=>$meta_query ) {
 			if ( $index === 'relation' ) {
