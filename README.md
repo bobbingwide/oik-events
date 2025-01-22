@@ -5,7 +5,7 @@
 * Tags: oik, events
 * Requires at least: 6.6
 * Tested up to: 6.7.1
-* Stable tag: 0.1.0
+* Stable tag: 0.1.1
 
 Events plugin to replace All-In-One Events Calendar.
 
@@ -51,12 +51,20 @@ No. This only supports migration from published posts in `ai1ec_events`
 
 ## Upgrade Notice 
 # 0.1.0 
+Update for a fix for the event_tickets virtual field #3
+
+# 0.1.0 
 Now supports Event start and end dates and times.
 
 # 0.0.0 
 Switch to oik-events to replace the All-In-One Events Calendar plugin.
 
 ## Changelog 
+# 0.1.1 
+* Changed: Comment out tracing #3
+* Fixed: Pass _start_date rather than _date. Theme event_tickets even when null #3
+* Tested: With WordPress 6.7.1 and WordPress Multisite
+
 # 0.1.0 
 * Changed: Change oik_events_event_when to use _start_date #1 #2 #4
 * Changed: Set both start and end dates and the post_date #1

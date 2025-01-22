@@ -3,7 +3,7 @@
 Plugin Name: oik-events
 Plugin URI: https://github.com/bobbingwide/oik-events
 Description: Events
-Version: 0.1.0
+Version: 0.1.1
 Author: bobbingwide
 Author URI: https://bobbingwide.com/about/bobbingwide
 License: GPL2
