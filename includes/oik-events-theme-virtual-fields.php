@@ -127,19 +127,16 @@ function oik_events_event_contact( $contact_name, $contact_phone, $contact_email
  */
 
 function oik_events_event_tickets( $ticket_url, $date, $id ) {
-	bw_trace2();
-	bw_backtrace();
+	//bw_trace2();
+	//bw_backtrace();
 	$html = '';
 	if ( empty($ticket_url ) ) {
 		return $html;
 	}
-	//$html = '<div class="wp-block-button">';
 	$html .= '<a class="p-block-button__link wp_element_button" href="';
 	$html .= $ticket_url;
 	$html .= '" target="_blank" rel="noreferrer noopener">';
 	$html .= 'Tickets';
 	$html .= '</a>';
-	//$html .= '</div>';
-
 	return $html;
 }
